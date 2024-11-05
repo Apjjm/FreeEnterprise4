@@ -66,6 +66,11 @@ _custom_weapons_db = csvdb.CsvDb(os.path.join(DB_PATH, 'custom_weapons.csvdb'), 
     'anim3' : csvdb.HexInt,
     })
 
+_encounters_db = csvdb.CsvDb(os.path.join(DB_PATH, 'encounters.csvdb'), {
+    'id' : csvdb.HexInt,
+    'formations' : csvdb.List(',', value_type=csvdb.HexInt)
+    })
+
 def get_curves_dbview():
     return _curves_db.create_view()
 
@@ -83,6 +88,9 @@ def get_spells_dbview():
 
 def get_custom_weapons_dbview():
     return _custom_weapons_db.create_view()
+
+def get_encounters_dbview():
+    return _encounters_db.create_view()    
 
 # helper function that some things need, maybe relocate?
 _item_spoiler_names = {}

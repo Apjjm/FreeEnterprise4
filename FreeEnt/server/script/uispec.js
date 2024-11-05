@@ -4485,6 +4485,10 @@ var FLAG_UISPEC = [
         "title": "No EXP for random encounters",
         "description": "Bosses and monster-in-a-box fights still award EXP.",
         "hard": true
+      },
+      {
+        "flag": "Eshuffle",
+        "title": "Shuffle encounter tables within each map"
       }
     ]
   },

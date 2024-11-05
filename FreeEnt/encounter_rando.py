@@ -1,4 +1,6 @@
 import math
+from . import databases
+from .address import *
 
 TRAPDOORS = ['DoubleDoor{}'.format(n) for n in range(2,17)]
 BEHEMOTHS = ['behemoth1','behemoth2','behemoth3']
@@ -55,3 +57,24 @@ def apply(env):
 
     if env.options.flags.has('encounter_cant_run'):
         env.add_file('scripts/cant_run.f4c')
+
+    if env.options.flags.has("encounter_shuffle"):
+        encounters_view = databases.get_encounters_dbview()
+        for id in range(0x5D): # For giant only: range(0x4A, 0x50)
+            encounter_data = encounters_view.find_one(lambda e: e.id == id)
+            if encounter_data is not None:
+                shuffled = env.rnd.sample(encounter_data.formations[:7], 7) + encounter_data.formations[7:8]
+                env.add_binary(UnheaderedAddress(0x74796 + id*8), shuffled)
+                if env.options.debug and id == 0x4B:
+                    if shuffled[4] == 0xBC:
+                        print('Eshuffle - Searcher (Mac Giant) -> Searcher (Horseman) Machine x2')
+                    elif shuffled[4] == 0xBB:
+                        print('Eshuffle - Searcher (Mac Giant) -> Machine x2 Beamer x2')
+                    elif shuffled[4] == 0xC0:
+                        print('Eshuffle - Searcher (Mac Giant) -> Horseman x1 Beamer x2')
+                    elif shuffled[4] == 0xC1:
+                        print('Eshuffle - Searcher (Mac Giant) -> Horseman x1 Beamer x1 Machine x1')
+                    elif shuffled[4] == 0xC2:
+                        print('Eshuffle - Searcher (Mac Giant) -> Searcher (Mac Giant)')
+                    elif shuffled[4] == 0xBE or shuffled[4] == 0xBF:
+                        print('Eshuffle - Searcher (Mac Giant) -> Mac Giant x1')
