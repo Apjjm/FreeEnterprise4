@@ -22,7 +22,11 @@ give item #BlackRobe
 give item #Baron
 give item #FireBrand
 give item #Magma
-
+give item #Siren
+give item #Siren
+give item #Siren
+give item #Siren
+give item #DarkCrystal
 give item #fe_CustomWeapon
 
 //set #CarryingAroundChildRydia
@@ -52,7 +56,7 @@ give item #BigBomb
 give spell #RydiaBlack #Stop
 */
 
-//set #fe_GotDarkCrystal
+set #fe_GotDarkCrystal
 set #fe_GotPackage
 //set #fe_GotEarthCrystal
 
