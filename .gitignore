@@ -1,0 +1,8 @@
+.ff4fe
+FreeEnt/server/bin
+
+**/.lastseed
+**/flagspec.txt.backup
+**/.build
+**/__pycache__
+**/*.js.map
