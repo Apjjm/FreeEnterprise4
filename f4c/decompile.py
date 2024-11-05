@@ -18,7 +18,7 @@ from .decompile_tilesets import decompile_tilesets
 from .decompile_shops import decompile_shops
 from .decompile_actors import decompile_actors
 from .decompile_drop_tables import decompile_drop_tables
-from .decompile_monsters import decompile_monsters, decompile_monster_stats
+from .decompile_monsters import decompile_monsters, decompile_monster_stats, decompile_encounter_tables
 from .decompile_formations import decompile_formations
 from .decompile_spells import decompile_spells
 from .decompile_spell_sets import decompile_spell_sets
@@ -146,6 +146,11 @@ if args.all or args.monsters:
     print("Exporting monster stats to {}".format(filename))
     with open(filename, 'w') as outfile:
         outfile.write(decompile_monster_stats(rom))
+
+    filename = output_prefix + '.encountertables.f4c'
+    print("Exporting encounter tables to {}".format(filename))
+    with open(filename, 'w') as outfile:
+        outfile.write(decompile_encounter_tables(rom))
 
 if args.all or args.formations:
     filename = output_prefix + '.formations.f4c'

@@ -115,6 +115,7 @@ class Rom:
         self.monsters = self.create_data_table(infile, pointer_address=0x726A0, data_address=0x68000, data_count=NUM_MONSTERS, data_consume_func=_consume_monster, data_overflow_address=0x736c0, nonlinear=True)
         self.monster_stats = self.create_data_table(infile, data_address=0x72380, data_count=0xE0, data_size=3)
         self.monster_speeds = self.create_data_table(infile, data_address=0x72620, data_count=0x40, data_size=2)
+        self.encounter_tables = self.create_data_table(infile, data_address=0x74796, data_count=0xE0, data_size=8)
 
         self.monster_scripts = self.create_data_table(infile, data_address=0x76900, data_count=0x100, data_consume_func=_consume_until(0xFF))
         self.moon_monster_scripts = self.create_data_table(infile, data_address=0x736C0, data_count=0x5A, data_consume_func=_consume_until(0xFF))

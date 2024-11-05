@@ -92,3 +92,12 @@ def decompile_monster_stats(rom):
 
     return '\n'.join(lines)
 
+def decompile_encounter_tables(rom):
+    lines = []
+
+    for i,encoded in enumerate(rom.encounter_tables):
+         lines.append('encounter_table({}) {{ {:02x} {:02x} {:02x} {:02x} {:02x} {:02x} {:02x} {:02x} }}'.format(
+             value_text(i), encoded[0], encoded[1], encoded[2], encoded[3], encoded[4], encoded[5], encoded[6], encoded[7]
+             ))
+         
+    return '\n'.join(lines)
