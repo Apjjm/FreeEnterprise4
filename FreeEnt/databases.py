@@ -68,7 +68,9 @@ _custom_weapons_db = csvdb.CsvDb(os.path.join(DB_PATH, 'custom_weapons.csvdb'), 
 
 _encounters_db = csvdb.CsvDb(os.path.join(DB_PATH, 'encounters.csvdb'), {
     'id' : csvdb.HexInt,
-    'formations' : csvdb.List(',', value_type=csvdb.HexInt)
+    'common' : csvdb.List(',', value_type=csvdb.HexInt),
+    'rare' : csvdb.HexInt,
+    'tier' : int
     })
 
 def get_curves_dbview():

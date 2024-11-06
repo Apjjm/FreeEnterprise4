@@ -58,23 +58,48 @@ def apply(env):
     if env.options.flags.has('encounter_cant_run'):
         env.add_file('scripts/cant_run.f4c')
 
-    if env.options.flags.has("encounter_shuffle"):
+    if env.options.flags.has('encounter_shuffle_wildish'):
+        encounters_view = databases.get_encounters_dbview()
+        for tier in range(5):
+            tier_offsets = []
+            tier_common = []
+            tier_rare = []
+            for encounter_data in encounters_view.find_all(lambda e: e.tier == tier):
+                tier_offsets.append(encounter_data.id)
+                tier_common.extend(encounter_data.common)
+                tier_rare.append(encounter_data.rare)
+
+            env.rnd.shuffle(tier_rare)
+            env.rnd.shuffle(tier_common)
+            for offset in tier_offsets:
+                shuffled = [tier_common.pop() for _ in range(7)]
+                _add_encounter_table(env, offset, shuffled, tier_rare.pop())
+
+            assert(len(tier_rare) == 0)
+            assert(len(tier_common) == 0)
+    elif env.options.flags.has('encounter_shuffle_standard'):
         encounters_view = databases.get_encounters_dbview()
         for id in range(0x5D): # For giant only: range(0x4A, 0x50)
             encounter_data = encounters_view.find_one(lambda e: e.id == id)
             if encounter_data is not None:
-                shuffled = env.rnd.sample(encounter_data.formations[:7], 7) + encounter_data.formations[7:8]
-                env.add_binary(UnheaderedAddress(0x74796 + id*8), shuffled)
-                if env.options.debug and id == 0x4B:
-                    if shuffled[4] == 0xBC:
-                        print('Eshuffle - Searcher (Mac Giant) -> Searcher (Horseman) Machine x2')
-                    elif shuffled[4] == 0xBB:
-                        print('Eshuffle - Searcher (Mac Giant) -> Machine x2 Beamer x2')
-                    elif shuffled[4] == 0xC0:
-                        print('Eshuffle - Searcher (Mac Giant) -> Horseman x1 Beamer x2')
-                    elif shuffled[4] == 0xC1:
-                        print('Eshuffle - Searcher (Mac Giant) -> Horseman x1 Beamer x1 Machine x1')
-                    elif shuffled[4] == 0xC2:
-                        print('Eshuffle - Searcher (Mac Giant) -> Searcher (Mac Giant)')
-                    elif shuffled[4] == 0xBE or shuffled[4] == 0xBF:
-                        print('Eshuffle - Searcher (Mac Giant) -> Mac Giant x1')
+                shuffled = env.rnd.sample(encounter_data.common, 7)
+                _add_encounter_table(env, encounter_data.id, shuffled, encounter_data.rare)
+
+def _add_encounter_table(env, offset, common, rare):
+    env.add_binary(UnheaderedAddress(0x74796 + offset*8), common + [rare])
+    if env.options.debug:
+        if offset == 0x4B:
+            if common[4] == 0xBC:
+                print('Eshuffle - Searcher (Mac Giant) -> Searcher (Horseman) Machine x2')
+            elif common[4] == 0xBB:
+                print('Eshuffle - Searcher (Mac Giant) -> Machine x2 Beamer x2')
+            elif common[4] == 0xC0:
+                print('Eshuffle - Searcher (Mac Giant) -> Horseman x1 Beamer x2')
+            elif common[4] == 0xC1:
+                print('Eshuffle - Searcher (Mac Giant) -> Horseman x1 Beamer x1 Machine x1')
+            elif common[4] == 0xC2:
+                print('Eshuffle - Searcher (Mac Giant) -> Searcher (Mac Giant)')
+            elif common[4] == 0xBE or common[4] == 0xBF:
+                print('Eshuffle - Searcher (Mac Giant) -> Mac Giant x1')
+            else:
+                print('Eshuffle - Searcher (Mac Giant) -> {:2X}'.format(common[4]))

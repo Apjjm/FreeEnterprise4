@@ -303,7 +303,9 @@
 .(Eno:jdrops) Use US version drop/sneak tables
 [Ecantrun]! Can't run from battles
 [Enoexp]! No EXP for random encounters
-[Eshuffle] Shuffle encounter tables within each map
+<> Encounter tables
+.(Eshuffle:standard) Shuffle encounter tables within each map
+.(Eshuffle:wildish) Shuffle encounter tables with similar maps
 
 == GLITCHES
 [@G] Enable major glitches
